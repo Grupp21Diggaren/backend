@@ -43,7 +43,7 @@ public class wikiAPI {
             // Clean HTML using Jsoup
             String cleanedText = Jsoup.clean(extract, Whitelist.relaxed());
             ct = cleanedText.split("<p>");
-            //System.out.println("First Paragraph: " + ct[2]);
+            
 
         } catch (Exception e) {
             e.printStackTrace();

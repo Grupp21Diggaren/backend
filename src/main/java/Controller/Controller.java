@@ -7,11 +7,12 @@ public class Controller {
     private wikiAPI wikiAPI = new wikiAPI();
 
     public Controller() {
-        String ans = getBiography("test");
+        String ans = getBiography("Edin");
         System.out.println(ans);
+
     }
 
     public String getBiography(String personName) {
-        return wikiAPI.getBiographyFromWikiAPI();
+        return wikiAPI.getBiographyFromWikiAPI(personName);
     }
 }

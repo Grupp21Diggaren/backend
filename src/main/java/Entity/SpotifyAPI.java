@@ -31,7 +31,7 @@ public class SpotifyAPI {
             .setRedirectUri(URI.create(redirectUri))
             .build();
 
-    public static void main(String[] args) throws IOException, ParseException, SpotifyWebApiException {
+    public static void main(String[] args) throws Exception {
         // Obtain access token using authorization code flow with PKCE
         authorize();
 
@@ -76,7 +76,7 @@ public class SpotifyAPI {
         }
     }
 
-    public static void askUserWhichSongToAdd() throws IOException, ParseException, SpotifyWebApiException {
+    public static void askUserWhichSongToAdd() throws Exception {
         //Scanner scanner = new Scanner(System.in);
         //System.out.print("Enter the name of a song you wish to add: ");
         String trackName = getRadioSongs();
@@ -101,9 +101,11 @@ public class SpotifyAPI {
         }
     }
 
-    private static String getRadioSongs(){
+    private static String getRadioSongs() throws Exception {
         RadioAPI sverigesRadio = new RadioAPI();
-        return sverigesRadio.getTitle();
+        sverigesRadio.getCurrentPlaylist(2576);
+        String nameAndArtist = sverigesRadio.getCurrTitle() + " " + sverigesRadio.getCurrArtist();
+        return nameAndArtist;
     }
 
     private static List<PlaylistSimplified> getUserPlaylists() {

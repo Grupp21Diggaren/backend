@@ -77,9 +77,9 @@ public class SpotifyAPI {
     }
 
     public static void askUserWhichSongToAdd() throws IOException, ParseException, SpotifyWebApiException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the name of a song you wish to add: ");
-        String trackName = scanner.nextLine().trim();
+        //Scanner scanner = new Scanner(System.in);
+        //System.out.print("Enter the name of a song you wish to add: ");
+        String trackName = getRadioSongs();
         List<Track> tracks = searchForTrack(trackName);
 
         if (!tracks.isEmpty()) {
@@ -99,6 +99,11 @@ public class SpotifyAPI {
                 }
             }
         }
+    }
+
+    private static String getRadioSongs(){
+        RadioAPI sverigesRadio = new RadioAPI();
+        return sverigesRadio.getTitle();
     }
 
     private static List<PlaylistSimplified> getUserPlaylists() {

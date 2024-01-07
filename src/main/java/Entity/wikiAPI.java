@@ -14,11 +14,13 @@ import java.io.InputStreamReader;
 import java.net.URLEncoder;
 
 public class wikiAPI {
+    static RadioAPI radioAPI = new RadioAPI();
+
     public wikiAPI() {
 
     }
 
-    public String getBiographyFromWikiAPI(String name) {
+    public static String getBiographyFromWikiAPI(String name) {
         try {
             // URL encode the entity name
             String encodedEntityName = URLEncoder.encode(name, "UTF-8");
@@ -77,6 +79,27 @@ public class wikiAPI {
             e.printStackTrace();
             return "Error occurred: " + e.getMessage();
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        radioAPI.getCurrentPlaylist(2576);
+
+        if (!radioAPI.getPrevArtist().equals("No information available")) {
+            System.out.println("Prev artist: " + radioAPI.getPrevArtist());
+            System.out.println(getBiographyFromWikiAPI(radioAPI.getPrevArtist()));
+        }
+        if (!radioAPI.getCurrArtist().equals("No information available")){
+            System.out.println("Curr artist: " + radioAPI.getCurrArtist());
+            System.out.println(getBiographyFromWikiAPI(radioAPI.getCurrArtist()));
+        }
+        if (radioAPI.getCurrArtist().equals("No information available")) {
+            System.out.println("No information available");
+        }
+        if (radioAPI.getPrevArtist().equals("No information available")) {
+            System.out.println("No information available");
+        }
+
+        //System.out.println(getBiographyFromWikiAPI(radioAPI.getPrevArtist()));
     }
 }
 

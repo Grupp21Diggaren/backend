@@ -15,7 +15,7 @@ import java.net.URLEncoder;
 
 public class wikiAPI {
     static RadioAPI radioAPI = new RadioAPI();
-
+    static String answer = "";
     public wikiAPI() {
 
     }
@@ -71,7 +71,17 @@ public class wikiAPI {
                 // Clean HTML using Jsoup
                 String cleanedText = Jsoup.clean(extract, Whitelist.relaxed());
                 String[] ct = cleanedText.split("<p>");
-                return ct[2];
+
+                if (ct[1] != null) {
+                    answer = ct[1];
+                } else if (ct[1] != null && ct[2] != null) {
+                    answer = ct[1] + ct[2];
+                } else {
+                    answer = "The person does not have a Wikipedia page";
+                }
+
+                return Jsoup.parse(answer).text();
+
             } else {
                 return "No relevant Wikipedia page found for the entity: " + name;
             }

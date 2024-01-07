@@ -6,14 +6,19 @@ import org.json.JSONObject;
 public class RadioAPI {
     private static final String URLSong = "https://api.sr.se/api/v2/playlists/rightnow?format=json&channelid=";
 
-    String title = "No information available";
-    String artist = "No information available";
 
-    public String getCurrentPlaylist(int Id) throws Exception {
+    private String currTitle = "No information available";
+    private String currArtist = "No information available";
+    private String prevTitle = "No information available";
+    private String prevArtist = "No information available";
+    private String nextTitle = "No information available";
+    private String nextArtist = "No information available";
+
+    public void getCurrentPlaylist(int Id) throws Exception {
         String urlSong = URLSong + Id;
         String jsonResponseSong = Request.Get(urlSong).execute().returnContent().asString();
 
-        //  System.out.println("JSON Response: " + jsonResponseSong);
+          System.out.println("JSON Response: " + jsonResponseSong);
 
 
         // Parse JSON response
@@ -21,15 +26,18 @@ public class RadioAPI {
         JSONObject songPlaylist = jsonObjectSong.getJSONObject("playlist");
 
         // default value
-        String previously = "";
-        String nowPlaying = "";
-        String upNext = "";
+        // String previously = "No information available";
+        // String nowPlaying = "No information available";
+        // String upNext = "No information available";
 
 
         if (songPlaylist.has("previoussong")) {
             // System.out.println("in prevsong");
             JSONObject previousSong = songPlaylist.getJSONObject("previoussong");
-            previously = formatSongDetails(previousSong);
+            prevTitle = previousSong.optString("title");
+
+            prevArtist = previousSong.optString("artist");
+
 
         }
 
@@ -37,44 +45,59 @@ public class RadioAPI {
         if (songPlaylist.has("song")) {
             // System.out.println("in currsong");
             JSONObject currentSong = songPlaylist.getJSONObject("song");
-            nowPlaying = formatSongDetails(currentSong);
+
+            currTitle = currentSong.optString("title");
+
+            currArtist = currentSong.optString("artist");
         }
 
 
         if (songPlaylist.has("nextsong")) {
             //  System.out.println("in nextsong");
             JSONObject nextSong = songPlaylist.getJSONObject("nextsong");
-            upNext = formatSongDetails(nextSong);
+            nextTitle = nextSong.optString("title");
+
+            nextArtist = nextSong.optString("artist");
         }
 
 
-        return "Previously: " + previously + "\nNow Playing: " + nowPlaying + "\nNext Song: " + upNext;
     }
 
 
-    private  String formatSongDetails(JSONObject songObject) {
-        String title = songObject.optString("title");
+    //  private String formatSongDetails(JSONObject songObject) {
+    //
+    //      String title = songObject.optString("title");
+    //
+    //      String artist = songObject.optString("artist");
+    //
+    //      return title + " by " + artist;
+    //  }
 
-        setTitle(title);
-        String artist = songObject.optString("artist");
-        setArtist(artist);
-        return title + " by " + artist;
+    public String getCurrTitle() {
+        return currTitle;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
+    public String getCurrArtist() {
+        return currArtist;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+
+    public String getPrevTitle() {
+        return prevTitle;
     }
 
-    public String getArtist() {
-        return artist;
+
+    public String getPrevArtist() {
+        return prevArtist;
     }
 
-    public String getTitle() {
-        return title;
+
+    public String getNextTitle() {
+        return nextTitle;
+    }
+
+    public String getNextArtist() {
+        return nextArtist;
     }
 
     public static void main(String[] args) {
@@ -83,8 +106,12 @@ public class RadioAPI {
         try {
             int channelId = 2576; // Example Channel ID
             // p3=164, din gata = 2576
-            String playlistDetails = radioAPI.getCurrentPlaylist(channelId);
-            System.out.println(playlistDetails);
+           // String playlistDetails = radioAPI.getCurrentPlaylist(channelId);
+
+            radioAPI.getCurrentPlaylist(channelId);
+             System.out.println("prev song: " + radioAPI.getPrevTitle() + " by " + radioAPI.getPrevArtist() +
+                                "\ncurr song: " + radioAPI.getCurrTitle() + " by " + radioAPI.getCurrArtist() +
+                                "\nnext song: " + radioAPI.getNextTitle() + " by " + radioAPI.getNextArtist());
         } catch (Exception e) {
             e.printStackTrace();
         }

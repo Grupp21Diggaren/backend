@@ -8,11 +8,13 @@ import org.json.JSONArray;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.json.JSONObject;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
 
+@SpringBootApplication
 public class WikiAPI {
     static RadioAPI radioAPI = new RadioAPI();
     static String answer = "";

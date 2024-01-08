@@ -1,10 +1,10 @@
 package Controller;
 
 
-import Entity.wikiAPI;
+import Entity.WikiAPI;
 
 public class Controller {
-    private wikiAPI wikiAPI = new wikiAPI();
+    private WikiAPI wikiAPI = new WikiAPI();
 
     public Controller() {
         //String ans = getBiography("Edin");

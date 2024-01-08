@@ -13,10 +13,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
 
-public class wikiAPI {
+public class WikiAPI {
     static RadioAPI radioAPI = new RadioAPI();
     static String answer = "";
-    public wikiAPI() {
+    public WikiAPI() {
 
     }
 

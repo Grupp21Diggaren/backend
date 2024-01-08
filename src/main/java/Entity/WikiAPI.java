@@ -2,6 +2,8 @@ package Entity;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONArray;
@@ -28,7 +30,7 @@ public class WikiAPI {
 
             // Search for the entity to get potential matches
             String searchUrl = "https://en.wikipedia.org/w/api.php?format=json&action=query&list=search&srsearch=" + encodedEntityName;
-            HttpClient searchHttpClient = HttpClients.createDefault();
+            HttpClient searchHttpClient = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build()).build();
             HttpGet searchHttpGet = new HttpGet(searchUrl);
 
             HttpResponse searchResponse = searchHttpClient.execute(searchHttpGet);
@@ -50,7 +52,7 @@ public class WikiAPI {
 
                 // Use the chosen page title to fetch the biography
                 String apiUrl = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&titles=" + URLEncoder.encode(pageTitle, "UTF-8") + "&redirects=true";
-                HttpClient httpClient = HttpClients.createDefault();
+                HttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build()).build();
                 HttpGet httpGet = new HttpGet(apiUrl);
 
                 HttpResponse response = httpClient.execute(httpGet);
@@ -73,10 +75,15 @@ public class WikiAPI {
                 String cleanedText = Jsoup.clean(extract, Whitelist.relaxed());
                 String[] ct = cleanedText.split("<p>");
 
-                if (ct[1] != null) {
-                    answer = ct[1];
-                } else if (ct[1] != null && ct[2] != null) {
-                    answer = ct[1] + ct[2];
+
+                if (ct.length > 0) {
+                    if (ct[2] != null) {
+                        answer = ct[1] + ct[2];
+                    } else if (ct[1] != null) {
+                        answer = ct[1];
+                    } else if (ct[0] != null){
+                        answer = ct[0];
+                    }
                 } else {
                     answer = "The person does not have a Wikipedia page";
                 }

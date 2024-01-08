@@ -21,9 +21,7 @@ public class Controller {
     @GetMapping("/api/biography/{artistName}")
     public String getBiography(@PathVariable("artistName") String artistName) {
         System.out.println(WikiAPI.getBiographyFromWikiAPI(artistName));
-
-        String bio = WikiAPI.getBiographyFromWikiAPI(artistName);
-        return "Biography for " + artistName + ": " + bio;
+        return "Biography for " + artistName + ": " + WikiAPI.getBiographyFromWikiAPI(artistName);
     }
 
 

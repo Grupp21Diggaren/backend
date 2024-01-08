@@ -8,13 +8,12 @@ import org.json.JSONArray;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.json.JSONObject;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
 
-@SpringBootApplication
+
 public class WikiAPI {
     static RadioAPI radioAPI = new RadioAPI();
     static String answer = "";
@@ -94,6 +93,10 @@ public class WikiAPI {
     }
 
     public static void main(String[] args) throws Exception {
+
+        System.out.println(WikiAPI.getBiographyFromWikiAPI("Michael Jordan"));
+
+        /*
         radioAPI.getCurrentPlaylist(2576);
 
         if (!radioAPI.getPrevArtist().equals("No information available")) {
@@ -110,6 +113,8 @@ public class WikiAPI {
         if (radioAPI.getPrevArtist().equals("No information available")) {
             System.out.println("No information available");
         }
+
+         */
 
         //System.out.println(getBiographyFromWikiAPI(radioAPI.getPrevArtist()));
     }

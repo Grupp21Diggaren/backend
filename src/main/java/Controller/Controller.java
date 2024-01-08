@@ -4,23 +4,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import Entity.WikiAPI;
-import org.springframework.boot.SpringApplication;
 
+@RestController
 public class Controller {
     private WikiAPI wikiAPI = new WikiAPI();
 
     public Controller() {
 
+    }
 
+    @GetMapping("/api/test")
+    public String getString() {
+        return "Here is the string!";
     }
 
     @GetMapping("/api/biography/{artistName}")
-    public String getBiography(@PathVariable String artistName) {
+    public String getBiography(@PathVariable("artistName") String artistName) {
+        System.out.println(WikiAPI.getBiographyFromWikiAPI(artistName));
+
         String bio = WikiAPI.getBiographyFromWikiAPI(artistName);
-
-        System.out.println(bio);
-
-        return "Biography for " + artistName;
+        return "Biography for " + artistName + ": " + bio;
     }
 
 

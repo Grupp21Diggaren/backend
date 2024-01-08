@@ -2,10 +2,12 @@ package Controller;
 
 import Entity.WikiAPI;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
         Controller controller = new Controller();
-        SpringApplication.run(WikiAPI.class, args);
     }
 }

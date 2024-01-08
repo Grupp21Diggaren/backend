@@ -5,7 +5,7 @@ import Entity.WikiAPI;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "127.0.0.1:5500")
+@CrossOrigin(origins = "http://localhost:80")
 public class Controller {
     private WikiAPI wikiAPI = new WikiAPI();
 

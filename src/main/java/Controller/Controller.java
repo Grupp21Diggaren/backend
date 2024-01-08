@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import Entity.WikiAPI;
 
 @RestController
-//@RequestMapping("/api")
+@RequestMapping("/api")
 @CrossOrigin(origins = "*")
 public class Controller {
     private WikiAPI wikiAPI = new WikiAPI();

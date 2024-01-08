@@ -2,11 +2,14 @@ package Entity;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import org.apache.hc.core5.http.ParseException;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.exceptions.detailed.ForbiddenException;
@@ -25,6 +28,7 @@ public class SpotifyAPI {
     private static final String redirectUri = "http://localhost:5000"; // Kan behövas ändra.
     private static final String scopes = "user-read-private user-read-email user-library-read user-library-modify playlist-modify-public playlist-modify-private";
 
+    private static List<PlaylistSimplified> playlist = new ArrayList<>();
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setClientId(clientId)
             .setClientSecret(clientSecret)
@@ -108,15 +112,15 @@ public class SpotifyAPI {
         return nameAndArtist;
     }
 
-    private static List<PlaylistSimplified> getUserPlaylists() {
+    public static List<PlaylistSimplified> getUserPlaylists() {
         try {
             // Get the current user's playlists
             final GetListOfCurrentUsersPlaylistsRequest playlistsRequest = spotifyApi.getListOfCurrentUsersPlaylists()
                     .limit(10)
                     .build();
             final Paging<PlaylistSimplified> playlistsPaging = playlistsRequest.execute();
-
-            return Arrays.asList(playlistsPaging.getItems());
+            playlist = Arrays.asList(playlistsPaging.getItems());
+            return playlist;
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.err.println("Error getting user's playlists: " + e.getMessage());
             e.printStackTrace();
@@ -239,5 +243,31 @@ public class SpotifyAPI {
             System.out.println("Please open the following URL in your browser to continue the authentication:");
             System.out.println(uri);
         }
+    }
+
+    private static final String SPOTIFY_API_URL = "https://api.spotify.com/v1/me/playlists";
+    private static final String PLAYLIST_NAME = "Diggaren";
+
+    public void createPlaylist(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> request = new HttpEntity<>(
+                "{\"name\":\"" + PLAYLIST_NAME + "\",\"public\":false,\"collaborative\":false,\"description\":\"Your playlist description here\"}",
+                headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(SPOTIFY_API_URL, request, String.class);
+
+        if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
+            System.out.println("Playlist created: " + responseEntity.getBody());
+        } else {
+            System.err.println("Failed to create playlist. Status code: " + responseEntity.getStatusCode());
+        }
+    }
+
+    public static List<PlaylistSimplified> getPlaylist() {
+        return playlist;
     }
 }
